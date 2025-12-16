@@ -8,5 +8,6 @@ urlpatterns = [
     path('preview/<slug:template_slug>/', views.preview_portfolio, name='preview_portfolio'),
     path('download/<slug:template_slug>/', views.download_portfolio, name='download_portfolio'),
     path('api/login/', views.firebase_login, name='firebase_login'),
+    path('run-migrations/', views.run_migrations, name='run_migrations'),
     path('logout/', views.logout_view, name='logout'),
 ]

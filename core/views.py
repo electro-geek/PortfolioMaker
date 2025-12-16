@@ -17,8 +17,11 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
+from django.core.management import call_command
 from firebase_admin import auth
+import io
+import sys
 
 def firebase_login(request):
     """Verify Firebase ID token and login user"""
