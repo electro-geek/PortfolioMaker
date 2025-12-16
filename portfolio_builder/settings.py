@@ -156,7 +156,9 @@ DATABASES = {
 db_url = os.environ.get('DATABASE_URL') or \
          os.environ.get('POSTGRES_URL') or \
          os.environ.get('POSTGRES_PRISMA_URL') or \
-         os.environ.get('POSTGRES_URL_NON_POOLING')
+         os.environ.get('POSTGRES_URL_NON_POOLING') or \
+         os.environ.get('NILEDB_URL') or \
+         os.environ.get('NILEDB_POSTGRES_URL')
 
 if db_url:
     # Fix protocol for Django (postgres:// -> postgresql://)
