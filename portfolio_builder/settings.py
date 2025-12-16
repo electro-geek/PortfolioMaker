@@ -129,12 +129,13 @@ except Exception as e:
     print(f"Error initializing Firebase: {e}")
 
 # Firebase Client Config (for frontend)
-FIREBASE_API_KEY = config.get('FIREBASE_API_KEY', '')
-FIREBASE_AUTH_DOMAIN = config.get('FIREBASE_AUTH_DOMAIN', '')
-FIREBASE_PROJECT_ID = config.get('FIREBASE_PROJECT_ID', '')
-FIREBASE_STORAGE_BUCKET = config.get('FIREBASE_STORAGE_BUCKET', '')
-FIREBASE_MESSAGING_SENDER_ID = config.get('FIREBASE_MESSAGING_SENDER_ID', '')
-FIREBASE_APP_ID = config.get('FIREBASE_APP_ID', '')
+# Firebase Client Config (for frontend)
+FIREBASE_API_KEY = config.get('FIREBASE_API_KEY', os.environ.get('FIREBASE_API_KEY', ''))
+FIREBASE_AUTH_DOMAIN = config.get('FIREBASE_AUTH_DOMAIN', os.environ.get('FIREBASE_AUTH_DOMAIN', ''))
+FIREBASE_PROJECT_ID = config.get('FIREBASE_PROJECT_ID', os.environ.get('FIREBASE_PROJECT_ID', ''))
+FIREBASE_STORAGE_BUCKET = config.get('FIREBASE_STORAGE_BUCKET', os.environ.get('FIREBASE_STORAGE_BUCKET', ''))
+FIREBASE_MESSAGING_SENDER_ID = config.get('FIREBASE_MESSAGING_SENDER_ID', os.environ.get('FIREBASE_MESSAGING_SENDER_ID', ''))
+FIREBASE_APP_ID = config.get('FIREBASE_APP_ID', os.environ.get('FIREBASE_APP_ID', ''))
 
 WSGI_APPLICATION = 'portfolio_builder.wsgi.app'  # Changed for Vercel
 
@@ -211,11 +212,11 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 SESSION_COOKIE_AGE = 86400  # 24 hours
 
 # Gemini API Configuration
-GEMINI_API_KEY = config.get('GEMINI_API_KEY', '')
+GEMINI_API_KEY = config.get('GEMINI_API_KEY', os.environ.get('GEMINI_API_KEY', ''))
 
 # Admin Access
 # Parse comma-separated string into a list
-admin_emails_str = config.get('ADMIN_EMAILS', '')
+admin_emails_str = config.get('ADMIN_EMAILS', os.environ.get('ADMIN_EMAILS', ''))
 ADMIN_EMAILS = [email.strip() for email in admin_emails_str.split(',') if email.strip()]
 
 
