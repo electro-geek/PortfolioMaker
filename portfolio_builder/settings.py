@@ -152,9 +152,25 @@ DATABASES = {
     }
 }
 
-# Update database configuration from $DATABASE_URL (for Vercel Postgres)
-db_from_env = dj_database_url.config(conn_max_age=600)
-DATABASES['default'].update(db_from_env)
+# Update database configuration from $DATABASE_URL or $POSTGRES_URL (for Vercel Postgres)
+db_url = os.environ.get('DATABASE_URL') or \
+         os.environ.get('POSTGRES_URL') or \
+         os.environ.get('POSTGRES_PRISMA_URL') or \
+         os.environ.get('POSTGRES_URL_NON_POOLING')
+
+if db_url:
+    # Fix protocol for Django (postgres:// -> postgresql://)
+    if db_url.startswith('postgres://'):
+        db_url = db_url.replace('postgres://', 'postgresql://', 1)
+    
+    print(f"Using Database URL: {db_url[:15]}...") # Log start of URL for debugging
+    
+    db_from_env = dj_database_url.parse(db_url, conn_max_age=600)
+    DATABASES['default'].update(db_from_env)
+else:
+    print("Using Local SQLite Database")
+
+print(f"Active Database Engine: {DATABASES['default']['ENGINE']}")
 
 
 # Password validation
