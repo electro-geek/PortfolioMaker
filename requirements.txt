@@ -1,0 +1,12 @@
+django
+google-generativeai
+pypdf
+pillow
+whitenoise
+firebase-admin
+cryptography
+PyJWT
+requests
+dj-database-url
+psycopg2-binary
+

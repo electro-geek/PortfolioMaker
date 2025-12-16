@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ name }} - Portfolio</title>
+    <meta name="description" content="{{ bio|truncatewords:20 }}">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Merriweather:wght@300;400;700;900&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Merriweather', serif;
+            background: #f5f5f0;
+            color: #1a1a1a;
+            line-height: 1.7;
+        }
+
+        .newspaper {
+            max-width: 1200px;
+            margin: 20px auto;
+            background: #fafaf5;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .masthead {
+            border-top: 4px solid #000;
+            border-bottom: 4px solid #000;
+            padding: 30px 40px;
+            background: #fff;
+            position: relative;
+        }
+
+        .masthead::before,
+        .masthead::after {
+            content: '';
+            position: absolute;
+            left: 40px;
+            right: 40px;
+            height: 1px;
+            background: #000;
+        }
+
+        .masthead::before {
+            top: 25px;
+        }
+
+        .masthead::after {
+            bottom: 25px;
+        }
+
+        .newspaper-title {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 4em;
+            font-weight: 700;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            margin: 0;
+            color: #000;
+        }
+
+        .edition {
+            text-align: center;
+            font-size: 0.85em;
+            margin-top: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 300;
+        }
+
+        .date-line {
+            text-align: center;
+            font-size: 0.9em;
+            margin-top: 5px;
+            font-style: italic;
+            border-top: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
+            padding: 8px 0;
+            margin-top: 15px;
+        }
+
+        .columns {
+            column-count: 1;
+            column-gap: 30px;
+            padding: 40px;
+        }
+
+        @media (min-width: 768px) {
+            .columns {
+                column-count: 2;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .columns {
+                column-count: 3;
+            }
+        }
+
+        .headline {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 2.5em;
+            font-weight: 700;
+            line-height: 1.2;
+            margin: 0 0 15px 0;
+            text-transform: uppercase;
+            column-span: all;
+            border-bottom: 3px solid #000;
+            padding-bottom: 10px;
+        }
+
+        .subheadline {
+            font-size: 1.3em;
+            font-weight: 700;
+            line-height: 1.3;
+            margin: 30px 0 10px 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 2px solid #000;
+            padding-bottom: 5px;
+            break-after: avoid;
+        }
+
+        .byline {
+            font-style: italic;
+            font-size: 0.95em;
+            margin-bottom: 15px;
+            color: #555;
+            text-align: center;
+            column-span: all;
+        }
+
+        .lead {
+            font-size: 1.15em;
+            font-weight: 400;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .article {
+            margin-bottom: 30px;
+            break-inside: avoid;
+        }
+
+        .article p {
+            text-align: justify;
+            margin-bottom: 12px;
+            hyphens: auto;
+        }
+
+        .contact-box {
+            border: 2px solid #000;
+            padding: 20px;
+            margin: 20px 0;
+            background: #fff;
+            break-inside: avoid;
+        }
+
+        .contact-box h3 {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 1.2em;
+            text-transform: uppercase;
+            border-bottom: 1px solid #000;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+        }
+
+        .contact-item {
+            display: flex;
+            margin: 8px 0;
+            font-size: 0.9em;
+        }
+
+        .contact-label {
+            font-weight: 700;
+            margin-right: 8px;
+        }
+
+        .contact-link {
+            color: #000;
+            text-decoration: underline;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-top: 15px;
+            break-inside: avoid;
+        }
+
+        .skill-item {
+            background: #000;
+            color: #fff;
+            padding: 8px 12px;
+            text-align: center;
+            font-size: 0.85em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .job-listing {
+            border: 3px double #000;
+            padding: 20px;
+            margin: 20px 0;
+            background: #fafafa;
+            break-inside: avoid;
+        }
+
+        .job-title {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 1.4em;
+            font-weight: 700;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .job-company {
+            font-weight: 700;
+            font-size: 1.05em;
+            margin-bottom: 5px;
+        }
+
+        .job-date {
+            font-style: italic;
+            font-size: 0.9em;
+            color: #555;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .job-description {
+            text-align: justify;
+            line-height: 1.6;
+        }
+
+        .tech-list {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed #999;
+        }
+
+        .tech-item {
+            display: inline-block;
+            background: #000;
+            color: #fff;
+            padding: 4px 10px;
+            margin: 3px;
+            font-size: 0.75em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .classified-ad {
+            border: 2px solid #000;
+            padding: 15px;
+            margin: 15px 0;
+            background: #fff;
+            break-inside: avoid;
+        }
+
+        .classified-title {
+            font-family: 'Libre Baskerville', serif;
+            font-weight: 700;
+            font-size: 1.2em;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .classified-meta {
+            font-size: 0.85em;
+            font-style: italic;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .classified-description {
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        .classified-link {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 15px;
+            background: #000;
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .footer-ad {
+            border-top: 4px double #000;
+            padding: 30px 40px;
+            text-align: center;
+            background: #f0f0f0;
+            margin-top: 40px;
+        }
+
+        .footer-ad p {
+            font-style: italic;
+            margin: 10px 0;
+        }
+
+        .section-break {
+            column-span: all;
+            border-bottom: 2px solid #000;
+            margin: 30px 0;
+        }
+
+        @media (max-width: 768px) {
+            .newspaper-title {
+                font-size: 2.5em;
+                letter-spacing: 4px;
+            }
+
+            .headline {
+                font-size: 1.8em;
+            }
+
+            .masthead {
+                padding: 20px;
+            }
+
+            .columns {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="newspaper">
+        <!-- Masthead -->
+        <div class="masthead">
+            <h1 class="newspaper-title">The Portfolio</h1>
+            <p class="edition">Special Professional Edition</p>
+            <p class="date-line">{{ "now"|date:"l, F j, Y" }}</p>
+        </div>
+
+        <!-- Main Content -->
+        <div class="columns">
+            <!-- Headline Story -->
+            <h2 class="headline">{{ name }}: {{ tagline }}</h2>
+            <p class="byline">An Exclusive Feature</p>
+
+            <div class="lead">
+                {{ bio }}
+            </div>
+
+            <!-- Contact Information -->
+            <div class="contact-box">
+                <h3>Contact Information</h3>
+                {% if contact.email %}
+                <div class="contact-item">
+                    <span class="contact-label">Email:</span>
+                    <a href="mailto:{{ contact.email }}" class="contact-link">{{ contact.email }}</a>
+                </div>
+                {% endif %}
+                {% if contact.phone %}
+                <div class="contact-item">
+                    <span class="contact-label">Phone:</span>
+                    <span>{{ contact.phone }}</span>
+                </div>
+                {% endif %}
+                {% if contact.linkedin %}
+                <div class="contact-item">
+                    <span class="contact-label">LinkedIn:</span>
+                    <a href="https://{{ contact.linkedin }}" target="_blank" class="contact-link">Profile</a>
+                </div>
+                {% endif %}
+                {% if contact.github %}
+                <div class="contact-item">
+                    <span class="contact-label">GitHub:</span>
+                    <a href="https://{{ contact.github }}" target="_blank" class="contact-link">Repository</a>
+                </div>
+                {% endif %}
+                {% if contact.website %}
+                <div class="contact-item">
+                    <span class="contact-label">Website:</span>
+                    <a href="https://{{ contact.website }}" target="_blank" class="contact-link">Visit</a>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Skills Section -->
+            <div class="article">
+                <h3 class="subheadline">Professional Skills</h3>
+                <div class="skills-grid">
+                    {% for skill in skills %}
+                    <div class="skill-item">{{ skill }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="section-break"></div>
+
+            <!-- Experience Section -->
+            <h3 class="subheadline">Employment History</h3>
+            {% for exp in experience %}
+            <div class="job-listing">
+                <div class="job-title">{{ exp.role }}</div>
+                <div class="job-company">{{ exp.company }}</div>
+                <div class="job-date">{{ exp.duration }}</div>
+                <div class="job-description">{{ exp.description }}</div>
+                {% if exp.technologies %}
+                <div class="tech-list">
+                    {% for tech in exp.technologies %}
+                    <span class="tech-item">{{ tech }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <div class="section-break"></div>
+
+            <!-- Projects Section -->
+            <h3 class="subheadline">Featured Projects</h3>
+            {% for project in projects %}
+            <div class="classified-ad">
+                <div class="classified-title">{{ project.name }}</div>
+                <div class="classified-meta">{{ project.duration }}</div>
+                <div class="classified-description">{{ project.description }}</div>
+                {% if project.technologies %}
+                <div class="tech-list">
+                    {% for tech in project.technologies %}
+                    <span class="tech-item">{{ tech }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% if project.link %}
+                <a href="https://{{ project.link }}" target="_blank" class="classified-link">View Project →</a>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <!-- Education Section -->
+            {% if education %}
+            <div class="section-break"></div>
+            <h3 class="subheadline">Educational Background</h3>
+            {% for edu in education %}
+            <div class="article">
+                <p><strong>{{ edu.degree }}</strong></p>
+                <p><em>{{ edu.institution }}</em> | {{ edu.duration }}</p>
+                {% if edu.details %}
+                <p>{{ edu.details }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+
+        <!-- Footer -->
+        <div class="footer-ad">
+            <p style="font-size: 1.3em; font-weight: 700;">Thank You for Reading</p>
+            <p>Portfolio generated {{ "now"|date:"F Y" }}</p>
+            <p style="font-size: 0.85em; margin-top: 15px;">All information verified and accurate as of publication date
+            </p>
+        </div>
+    </div>
+</body>
+
+</html>

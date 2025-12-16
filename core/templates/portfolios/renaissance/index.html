@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ name }} - Portfolio</title>
+    <meta name="description" content="{{ bio|truncatewords:20 }}">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Crimson Text', serif;
+            background: linear-gradient(to bottom, #f4e4c1 0%, #e9d5a1 50%, #d4b896 100%);
+            color: #3d2514;
+            line-height: 1.8;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Parchment texture overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                repeating-linear-gradient(0deg, rgba(0, 0, 0, .03) 0px, transparent 1px, transparent 2px, rgba(0, 0, 0, .03) 3px),
+                repeating-linear-gradient(90deg, rgba(0, 0, 0, .03) 0px, transparent 1px, transparent 2px, rgba(0, 0, 0, .03) 3px);
+            pointer-events: none;
+            opacity: 0.4;
+        }
+
+        .page {
+            max-width: 900px;
+            margin: 40px auto;
+            background: rgba(255, 248, 230, 0.95);
+            box-shadow:
+                0 0 40px rgba(0, 0, 0, 0.3),
+                inset 0 0 100px rgba(139, 69, 19, 0.05);
+            border: 20px solid;
+            border-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect fill="%238B4513" width="100" height="100"/></svg>') 20;
+            position: relative;
+        }
+
+        .page::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            right: -15px;
+            bottom: -15px;
+            border: 3px double #8B4513;
+            pointer-events: none;
+        }
+
+        .content {
+            padding: 60px;
+        }
+
+        .ornament {
+            text-align: center;
+            color: #8B4513;
+            font-size: 2em;
+            margin: 20px 0;
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 3.5em;
+            font-weight: 900;
+            text-align: center;
+            color: #5d3a1a;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        h1::first-letter {
+            font-size: 1.5em;
+            color: #8B0000;
+            text-shadow: 2px 2px 2px rgba(139, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            font-family: 'Cinzel', serif;
+            text-align: center;
+            font-size: 1.3em;
+            color: #76520e;
+            font-style: italic;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+        }
+
+        .divider {
+            width: 60%;
+            height: 3px;
+            background: linear-gradient(to right, transparent, #8B4513, transparent);
+            margin: 40px auto;
+            position: relative;
+        }
+
+        .divider::before {
+            content: '❦';
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: #f4e4c1;
+            padding: 0 15px;
+            color: #8B4513;
+            font-size: 1.5em;
+        }
+
+        h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 2em;
+            color: #5d3a1a;
+            text-align: center;
+            margin: 50px 0 30px 0;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            position: relative;
+        }
+
+        h2::before,
+        h2::after {
+            content: '⚜';
+            color: #8B4513;
+            margin: 0 20px;
+        }
+
+        .intro {
+            text-align: center;
+            font-size: 1.2em;
+            padding: 0 40px;
+            margin-bottom: 40px;
+            line-height: 2;
+        }
+
+        .contact-section {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: rgba(139, 69, 19, 0.05);
+            border-top: 2px solid #8B4513;
+            border-bottom: 2px solid #8B4513;
+        }
+
+        .contact-link {
+            color: #8B0000;
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 1px solid #8B0000;
+            transition: all 0.3s;
+            margin: 0 15px;
+        }
+
+        .contact-link:hover {
+            color: #5d3a1a;
+            border-bottom-color: #5d3a1a;
+        }
+
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .skill-badge {
+            background: rgba(139, 69, 19, 0.1);
+            border: 2px solid #8B4513;
+            color: #5d3a1a;
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-family: 'Cinzel', serif;
+            font-weight: 600;
+            font-size: 0.95em;
+            letter-spacing: 1px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .item {
+            margin: 40px 0;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.3);
+            border-left: 5px solid #8B4513;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .item-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5em;
+            color: #5d3a1a;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .item-meta {
+            font-style: italic;
+            color: #76520e;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .item-description {
+            font-size: 1.1em;
+            line-height: 1.9;
+            text-align: justify;
+        }
+
+        .tech-tags {
+            margin-top: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tech-tag {
+            background: rgba(139, 0, 0, 0.1);
+            color: #8B0000;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            border: 1px solid #8B0000;
+        }
+
+        .project-link {
+            display: inline-block;
+            margin-top: 12px;
+            color: #8B0000;
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 2px solid #8B0000;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 30px;
+            border-top: 3px double #8B4513;
+            font-style: italic;
+            color: #76520e;
+        }
+
+        .seal {
+            width: 80px;
+            height: 80px;
+            margin: 20px auto;
+            border-radius: 50%;
+            background: radial-gradient(circle, #8B0000 0%, #5d3a1a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Cinzel', serif;
+            color: #f4e4c1;
+            font-weight: bold;
+            font-size: 2em;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .page {
+                margin: 20px;
+                border-width: 10px;
+            }
+
+            .content {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            h2 {
+                font-size: 1.5em;
+            }
+
+            .intro {
+                padding: 0 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+        <div class="content">
+            <!-- Header -->
+            <div class="ornament">✦ ✦ ✦</div>
+            <h1>{{ name }}</h1>
+            <p class="subtitle">{{ tagline }}</p>
+            <div class="ornament">✦ ✦ ✦</div>
+
+            <div class="divider"></div>
+
+            <!-- Bio -->
+            <div class="intro">
+                <p style="font-size: 1.15em;">{{ bio }}</p>
+            </div>
+
+            <!-- Contact -->
+            <div class="contact-section">
+                {% if contact.email %}
+                <a href="mailto:{{ contact.email }}" class="contact-link">✉ Correspondence</a>
+                {% endif %}
+                {% if contact.linkedin %}
+                <a href="https://{{ contact.linkedin }}" target="_blank" class="contact-link">⚭ Professional Guild</a>
+                {% endif %}
+                {% if contact.github %}
+                <a href="https://{{ contact.github }}" target="_blank" class="contact-link">⚒ Workshop</a>
+                {% endif %}
+                {% if contact.website %}
+                <a href="https://{{ contact.website }}" target="_blank" class="contact-link">⚓ Web Presence</a>
+                {% endif %}
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Skills -->
+            <h2>Masteries & Crafts</h2>
+            <div class="skills-container">
+                {% for skill in skills %}
+                <div class="skill-badge">{{ skill }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Experience -->
+            <h2>Professional Chronicle</h2>
+            {% for exp in experience %}
+            <div class="item">
+                <div class="item-title">{{ exp.role }}</div>
+                <div class="item-meta">{{ exp.company }} • {{ exp.duration }}</div>
+                <div class="item-description">{{ exp.description }}</div>
+                {% if exp.technologies %}
+                <div class="tech-tags">
+                    {% for tech in exp.technologies %}
+                    <span class="tech-tag">{{ tech }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <div class="divider"></div>
+
+            <!-- Projects -->
+            <h2>Notable Works & Endeavors</h2>
+            {% for project in projects %}
+            <div class="item">
+                <div class="item-title">{{ project.name }}</div>
+                <div class="item-meta">Anno {{ project.duration }}</div>
+                <div class="item-description">{{ project.description }}</div>
+                {% if project.technologies %}
+                <div class="tech-tags">
+                    {% for tech in project.technologies %}
+                    <span class="tech-tag">{{ tech }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% if project.link %}
+                <a href="https://{{ project.link }}" target="_blank" class="project-link">⟹ Behold the Work</a>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <!-- Education -->
+            {% if education %}
+            <div class="divider"></div>
+            <h2>Academic Pursuits</h2>
+            {% for edu in education %}
+            <div class="item">
+                <div class="item-title">{{ edu.degree }}</div>
+                <div class="item-meta">{{ edu.institution }} • {{ edu.duration }}</div>
+                {% if edu.details %}
+                <div class="item-description">{{ edu.details }}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+            {% endif %}
+
+            <!-- Footer -->
+            <div class="footer">
+                <div class="seal">{{ name|first }}</div>
+                <p style="font-size: 1.1em; margin-top: 20px;">
+                    "In the pursuit of excellence, one finds purpose"
+                </p>
+                <p style="margin-top: 15px; font-size: 0.95em;">
+                    Crafted with reverence in the year {{ "now"|date:"Y" }}
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,383 @@
+{% extends 'core/base.html' %}
+
+{% block extra_css %}
+<style>
+    .cursor {
+        display: inline-block;
+        width: 4px;
+        height: 0.8em;
+        background-color: #a855f7;
+        margin-left: 4px;
+        vertical-align: middle;
+        animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+
+        0%,
+        100% {
+            opacity: 1;
+        }
+
+        50% {
+            opacity: 0;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center p-4">
+    <div class="max-w-4xl w-full">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-6xl font-bold mb-4">
+                <span class="gradient-text">AI-Powered</span>
+                <br>
+                <span id="typing-text"></span><span class="cursor"></span>
+            </h1>
+            <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+                Transform your resume into a stunning, professional portfolio website in seconds using the power of AI
+            </p>
+        </div>
+
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center glass rounded-2xl mb-8">
+            <div class="flex items-center gap-2">
+                <div
+                    class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg flex items-center justify-center text-white font-bold shadow-lg">
+                    AI</div>
+                <span
+                    class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">PortfolioMaker</span>
+            </div>
+            <div class="flex items-center gap-4">
+                {% if user.is_authenticated %}
+                <div class="flex items-center gap-4">
+                    <div
+                        class="flex items-center gap-3 bg-white/10 px-4 py-2 rounded-full border border-white/10 backdrop-blur-sm">
+                        {% if request.session.user_picture %}
+                        <img src="{{ request.session.user_picture }}" alt="Profile"
+                            class="w-8 h-8 rounded-full border-2 border-purple-400">
+                        {% else %}
+                        <div
+                            class="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-white font-bold border-2 border-purple-300">
+                            {{ user.first_name|first|default:user.username|first|upper }}
+                        </div>
+                        {% endif %}
+                        <span class="text-gray-200 font-medium">{{ user.first_name|default:user.username }}</span>
+                    </div>
+                    <a href="{% url 'logout' %}"
+                        class="text-gray-300 hover:text-white font-medium transition-colors text-sm">Logout</a>
+                </div>
+                {% else %}
+                <button id="google-signin-btn"
+                    class="flex items-center gap-2 bg-white/10 border border-white/20 text-white px-4 py-2 rounded-lg hover:bg-white/20 transition-all shadow-lg backdrop-blur-sm">
+                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5" alt="Google">
+                    Google
+                </button>
+                <button id="github-signin-btn"
+                    class="flex items-center gap-2 bg-white/10 border border-white/20 text-white px-4 py-2 rounded-lg hover:bg-white/20 transition-all shadow-lg backdrop-blur-sm">
+                    <img src="https://www.svgrepo.com/show/512317/github-142.svg" class="w-5 h-5 invert" alt="GitHub">
+                    GitHub
+                </button>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Global CSRF Token for JS -->
+        <div class="hidden">
+            {% csrf_token %}
+        </div>
+
+        <!-- Firebase SDKs -->
+        <script type="module">
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+            import { getAuth, signInWithPopup, GoogleAuthProvider, GithubAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+            // Your web app's Firebase configuration
+            const firebaseConfig = {{ firebase_config| safe }};
+            console.log("Initializing Firebase with:", firebaseConfig);
+
+            try {
+                // Initialize Firebase
+                const app = initializeApp(firebaseConfig);
+                const auth = getAuth(app);
+                // Helper function for login
+                const handleLogin = async (provider) => {
+                    try {
+                        const result = await signInWithPopup(auth, provider);
+                        console.log("Sign in successful", result.user);
+
+                        const user = result.user;
+                        const idToken = await user.getIdToken();
+
+                        console.log("Got ID token, sending to backend...");
+
+                        // Send token to backend
+                        const response = await fetch('/api/login/', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                            },
+                            body: JSON.stringify({ id_token: idToken })
+                        });
+
+                        const data = await response.json();
+                        console.log("Backend response:", data);
+
+                        if (data.status === 'success') {
+                            window.location.reload();
+                        } else {
+                            alert('Login failed: ' + data.error);
+                        }
+
+                    } catch (error) {
+                        console.error("Error signing in:", error);
+                        if (error.code === 'auth/operation-not-allowed') {
+                            alert("Login Provider Error: This sign-in method (Google/GitHub) is not enabled in the Firebase Console. Please contact the administrator.");
+                        } else if (error.code === 'auth/popup-closed-by-user') {
+                            console.log("Popup closed by user");
+                        } else {
+                            alert("Error signing in: " + error.message);
+                        }
+                    }
+                };
+
+                // Attach event listeners
+                const googleBtn = document.getElementById('google-signin-btn');
+                if (googleBtn) {
+                    googleBtn.addEventListener('click', () => handleLogin(new GoogleAuthProvider()));
+                }
+
+                const githubBtn = document.getElementById('github-signin-btn');
+                if (githubBtn) {
+                    githubBtn.addEventListener('click', () => handleLogin(new GithubAuthProvider()));
+                }
+            } catch (e) {
+                console.error("Firebase Initialization Error:", e);
+                alert("Firebase Error: " + e.message);
+            }
+        </script>
+
+        <!-- Upload Card (Only for Logged In Users) -->
+        {% if user.is_authenticated %}
+        {% if has_generated_portfolio %}
+        <!-- Premium Upgrade Placeholder -->
+        <div class="glass rounded-3xl shadow-2xl p-8 md:p-12 hover-scale relative overflow-hidden text-center">
+            <div
+                class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-yellow-500/10 to-orange-500/10 pointer-events-none">
+            </div>
+
+            <div
+                class="inline-block p-4 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-full mb-6 shadow-lg shadow-orange-500/30">
+                <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
+                    </path>
+                </svg>
+            </div>
+
+            <h2 class="text-3xl font-bold text-white mb-4">Free Limit Reached</h2>
+            <p class="text-gray-300 mb-8 max-w-lg mx-auto">
+                You've already generated a stunning portfolio! To create another one or unlock premium templates,
+                upgrade to our Pro plan.
+            </p>
+
+            <button
+                class="bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold py-4 px-10 rounded-xl hover:from-yellow-400 hover:to-orange-400 transition-all transform hover:scale-105 shadow-lg shadow-orange-500/30">
+                Unlock Premium Access
+            </button>
+
+            <p class="mt-6 text-sm text-gray-400">
+                (This is a placeholder for the payment flow)
+            </p>
+        </div>
+        {% else %}
+        <!-- Upload Form -->
+        <div class="glass rounded-3xl shadow-2xl p-8 md:p-12 hover-scale relative overflow-hidden">
+            <!-- Decorative glow -->
+            <div
+                class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-purple-500/10 to-blue-500/10 pointer-events-none">
+            </div>
+
+            <div class="text-center mb-8 relative z-10">
+                <div
+                    class="inline-block p-4 bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl mb-4 shadow-lg shadow-purple-500/30">
+                    <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12">
+                        </path>
+                    </svg>
+                </div>
+                <h2 class="text-3xl font-bold text-white mb-2">Upload Your Resume</h2>
+                <p class="text-gray-300">PDF format, maximum 10MB</p>
+            </div>
+
+            <form method="post" action="{% url 'upload_resume' %}" enctype="multipart/form-data" id="upload-form"
+                class="relative z-10">
+                {% csrf_token %}
+
+                <div class="border-4 border-dashed border-purple-500/30 bg-purple-500/5 rounded-2xl p-12 text-center hover:border-purple-500/60 hover:bg-purple-500/10 transition-all cursor-pointer group"
+                    id="drop-zone">
+                    <input type="file" name="resume_file" accept="application/pdf" class="hidden" id="resume-upload"
+                        required>
+
+                    <label for="resume-upload" class="cursor-pointer">
+                        <div class="mb-4 transform group-hover:scale-110 transition-transform">
+                            <svg class="w-16 h-16 mx-auto text-purple-400" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                </path>
+                            </svg>
+                        </div>
+                        <p class="text-lg font-semibold text-gray-200 mb-2 group-hover:text-white transition-colors">
+                            Click to browse or drag and drop your resume
+                        </p>
+                        <p class="text-sm text-gray-400" id="file-name">
+                            No file selected
+                        </p>
+                    </label>
+                </div>
+
+                <button type="submit"
+                    class="w-full mt-8 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold py-4 px-8 rounded-xl hover:from-purple-500 hover:to-blue-500 transition-all transform hover:scale-[1.02] shadow-lg shadow-purple-900/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                    id="submit-btn" disabled>
+                    <span class="flex items-center justify-center">
+                        <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                        Generate My Portfolio
+                    </span>
+                </button>
+            </form>
+        </div>
+        {% endif %}
+        {% else %}
+        <!-- Login CTA for Non-Logged In Users -->
+        <div class="glass rounded-3xl shadow-2xl p-12 text-center hover-scale relative overflow-hidden">
+            <div
+                class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-purple-500/10 to-blue-500/10 pointer-events-none">
+            </div>
+
+            <h2 class="text-4xl font-bold text-white mb-6">Ready to Build Your Portfolio?</h2>
+            <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+                Sign in to access our AI-powered resume parser and premium templates. It's free and takes seconds.
+            </p>
+
+            <div class="flex flex-col md:flex-row justify-center gap-4">
+                <button onclick="document.getElementById('google-signin-btn').click()"
+                    class="bg-white text-gray-900 font-bold py-4 px-10 rounded-xl hover:bg-gray-100 transition-all transform hover:scale-105 shadow-lg flex items-center justify-center gap-3">
+                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-6 h-6" alt="Google">
+                    Get Started with Google
+                </button>
+                <button onclick="document.getElementById('github-signin-btn').click()"
+                    class="bg-[#24292F] text-white font-bold py-4 px-10 rounded-xl hover:bg-[#24292F]/90 transition-all transform hover:scale-105 shadow-lg flex items-center justify-center gap-3">
+                    <img src="https://www.svgrepo.com/show/512317/github-142.svg" class="w-6 h-6 invert" alt="GitHub">
+                    Get Started with GitHub
+                </button>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Features -->
+        <div class="grid md:grid-cols-3 gap-6 mt-12">
+            <div class="glass rounded-2xl p-6 shadow-lg text-center hover-scale border border-white/10">
+                <div class="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z">
+                        </path>
+                    </svg>
+                </div>
+                <h3 class="font-bold text-white mb-2">AI-Powered</h3>
+                <p class="text-sm text-gray-400">Google Gemini extracts and enhances your resume data</p>
+            </div>
+
+            <div class="glass rounded-2xl p-6 shadow-lg text-center hover-scale border border-white/10">
+                <div class="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01">
+                        </path>
+                    </svg>
+                </div>
+                <h3 class="font-bold text-white mb-2">Beautiful Templates</h3>
+                <p class="text-sm text-gray-400">Choose from unique, premium design templates</p>
+            </div>
+
+            <div class="glass rounded-2xl p-6 shadow-lg text-center hover-scale border border-white/10">
+                <div class="w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                    </svg>
+                </div>
+                <h3 class="font-bold text-white mb-2">Instant Download</h3>
+                <p class="text-sm text-gray-400">Get your portfolio as a ready-to-deploy website</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const fileInput = document.getElementById('resume-upload');
+    const fileName = document.getElementById('file-name');
+    const submitBtn = document.getElementById('submit-btn');
+    const dropZone = document.getElementById('drop-zone');
+
+    fileInput.addEventListener('change', function (e) {
+        if (e.target.files.length > 0) {
+            fileName.textContent = e.target.files[0].name;
+            submitBtn.disabled = false;
+            dropZone.classList.add('border-purple-500', 'bg-purple-50');
+        }
+    });
+
+    // Drag and drop functionality
+    dropZone.addEventListener('dragover', function (e) {
+        e.preventDefault();
+        dropZone.classList.add('border-purple-500', 'bg-purple-50');
+    });
+
+    dropZone.addEventListener('dragleave', function (e) {
+        e.preventDefault();
+        if (!fileInput.files.length) {
+            dropZone.classList.remove('border-purple-500', 'bg-purple-50');
+        }
+    });
+
+    dropZone.addEventListener('drop', function (e) {
+        e.preventDefault();
+        const files = e.dataTransfer.files;
+        if (files.length > 0 && files[0].type === 'application/pdf') {
+            fileInput.files = files;
+            fileName.textContent = files[0].name;
+            submitBtn.disabled = false;
+            dropZone.classList.add('border-purple-500', 'bg-purple-50');
+        }
+    });
+</script>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const text = "Portfolio Generator";
+        const typingElement = document.getElementById('typing-text');
+        let i = 0;
+
+        function typeWriter() {
+            if (i < text.length) {
+                typingElement.textContent += text.charAt(i);
+                i++;
+                setTimeout(typeWriter, 100);
+            }
+        }
+
+        // Start typing after a short delay
+        setTimeout(typeWriter, 500);
+    });
+</script>
+{% endblock %}
