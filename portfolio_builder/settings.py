@@ -48,7 +48,7 @@ SECRET_KEY = 'django-insecure-^=$1*it1+0kg4r#1_e4v#&8m-g%k!ocjcc87w0*1%i2rq-ch=n
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ['.vercel.app', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['.vercel.app', '127.0.0.1', 'localhost', 'portfoliomaker.mritunjay.live', '.mritunjay.live']
 
 # Allow Google Sign-In popups
 SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin-allow-popups'
