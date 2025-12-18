@@ -72,6 +72,18 @@ def logout_view(request):
     logout(request)
     return redirect('home')
 
+@login_required
+def clear_api_key(request):
+    """Clear the saved Gemini API key from user profile"""
+    try:
+        profile = request.user.userprofile
+        profile.gemini_api_key = None
+        profile.save()
+        messages.success(request, 'Saved API key cleared successfully.')
+    except Exception as e:
+        messages.error(request, f'Error clearing API key: {str(e)}')
+    return redirect('home')
+
 def home(request):
     """Render home page with Firebase config"""
     context = {
@@ -87,14 +99,18 @@ def home(request):
     
     # Check if user has generated portfolio
     if request.user.is_authenticated:
-        # Grant unlimited access to admin users defined in config
-        if request.user.email in settings.ADMIN_EMAILS:
-            context['has_generated_portfolio'] = False
-        else:
-            try:
-                context['has_generated_portfolio'] = request.user.userprofile.has_generated_portfolio
-            except Exception:
+        try:
+            profile = request.user.userprofile
+            context['has_api_key'] = bool(profile.gemini_api_key)
+            
+            # Grant unlimited access to admin users defined in config
+            if request.user.email in settings.ADMIN_EMAILS:
                 context['has_generated_portfolio'] = False
+            else:
+                context['has_generated_portfolio'] = profile.has_generated_portfolio
+        except Exception:
+            context['has_generated_portfolio'] = False
+            context['has_api_key'] = False
             
     return render(request, 'core/home.html', context)
 
@@ -126,28 +142,52 @@ def upload_resume(request):
                 messages.error(request, 'Could not extract text from PDF. Is it an image scan?')
                 return redirect('home')
             
-            # 2. Get structured data from Gemini
-            extracted_data = get_portfolio_data(text)
+            # 2. Determine which API key to use
+            user_api_key = request.POST.get('user_api_key', '').strip()
+            profile = None
             
-            # 3. Store data in SESSION (Stateless!)
-            # We don't save to DB because Vercel is read-only/ephemeral
-            request.session['portfolio_data'] = extracted_data
-            
-            # Mark that the user has used their free generation (Persist in DB)
             if request.user.is_authenticated:
                 try:
                     profile = request.user.userprofile
-                    profile.has_generated_portfolio = True
-                    profile.save()
-                except Exception:
-                    # Handle case where profile might not exist (though signal should handle it)
+                    # If key provided in form, save it
+                    if user_api_key:
+                        print(f"DEBUG: Using API key from POST for user {request.user.username}")
+                        profile.gemini_api_key = user_api_key
+                        profile.save()
+                    # If no key in form, try to use saved key
+                    elif profile.gemini_api_key:
+                        print(f"DEBUG: Using saved API key from Profile for user {request.user.username}")
+                        user_api_key = profile.gemini_api_key.strip()
+                    else:
+                        print(f"DEBUG: No user API key found, falling back to system key")
+                except Exception as e:
+                    print(f"DEBUG: Error accessing profile: {e}")
                     pass
+
+            # 3. Get structured data from Gemini
+            try:
+                extracted_data = get_portfolio_data(text, api_key=user_api_key)
+            except Exception as e:
+                # If there's an error and we're using a user API key, it might be invalid
+                if user_api_key and user_api_key != settings.GEMINI_API_KEY:
+                    messages.error(request, f'API Key Error: {str(e)}. Please update your API key or use the premium feature.')
+                else:
+                    messages.error(request, f'Error processing resume: {str(e)}')
+                return redirect('home')
+            
+            # 4. Store data in SESSION (Stateless!)
+            request.session['portfolio_data'] = extracted_data
+            
+            # Mark that the user has used their free generation
+            if profile:
+                profile.has_generated_portfolio = True
+                profile.save()
             
             messages.success(request, 'Resume processed successfully!')
             return redirect('select_template')
             
         except Exception as e:
-            messages.error(request, f'Error processing resume: {str(e)}')
+            messages.error(request, f'Unexpected error: {str(e)}')
             return redirect('home')
     else:
         form = ResumeUploadForm()

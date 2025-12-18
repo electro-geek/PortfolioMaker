@@ -6,6 +6,7 @@ from django.dispatch import receiver
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     has_generated_portfolio = models.BooleanField(default=False)
+    gemini_api_key = models.CharField(max_length=255, blank=True, null=True)
     
     def __str__(self):
         return self.user.username

@@ -94,7 +94,7 @@
             import { getAuth, signInWithPopup, GoogleAuthProvider, GithubAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
             // Your web app's Firebase configuration
-            const firebaseConfig = {{ firebase_config| safe }};
+            const firebaseConfig = JSON.parse('{{ firebase_config|safe }}');
             console.log("Initializing Firebase with:", firebaseConfig);
 
             try {
@@ -161,37 +161,178 @@
 
         <!-- Upload Card (Only for Logged In Users) -->
         {% if user.is_authenticated %}
-        {% if has_generated_portfolio %}
-        <!-- Premium Upgrade Placeholder -->
-        <div class="glass rounded-3xl shadow-2xl p-8 md:p-12 hover-scale relative overflow-hidden text-center">
+        {% if has_generated_portfolio and not has_api_key %}
+        <!-- Premium Options (When Limit Reached) -->
+        <div class="glass rounded-3xl shadow-2xl p-8 md:p-12 hover-scale relative overflow-hidden">
             <div
                 class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-yellow-500/10 to-orange-500/10 pointer-events-none">
             </div>
 
-            <div
-                class="inline-block p-4 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-full mb-6 shadow-lg shadow-orange-500/30">
-                <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
-                    </path>
-                </svg>
+            <div class="text-center mb-8 relative z-10">
+                <div
+                    class="inline-block p-4 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-2xl mb-4 shadow-lg shadow-orange-500/30">
+                    <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-7.714 2.143L11 21l-2.286-6.857L1 12l7.714-2.143L11 3z">
+                        </path>
+                    </svg>
+                </div>
+                <h2 class="text-3xl font-bold text-white mb-2">Free Limit Reached</h2>
+                <p class="text-gray-300">You've reached the limit for free generations. Choose a premium option to
+                    continue.</p>
             </div>
 
-            <h2 class="text-3xl font-bold text-white mb-4">Free Limit Reached</h2>
-            <p class="text-gray-300 mb-8 max-w-lg mx-auto">
-                You've already generated a stunning portfolio! To create another one or unlock premium templates,
-                upgrade to our Pro plan.
-            </p>
+            <div class="grid md:grid-cols-2 gap-6 relative z-10">
+                <!-- Option 1: Pro Plan -->
+                <div
+                    class="glass-card p-6 rounded-2xl border border-yellow-500/30 flex flex-col items-center text-center">
+                    <h3 class="text-xl font-bold text-white mb-4">Upgrade to Pro</h3>
+                    <ul class="text-sm text-gray-400 mb-6 space-y-2 text-left">
+                        <li class="flex items-center gap-2"><svg class="w-4 h-4 text-green-400" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7"></path>
+                            </svg> Unlimited Generations</li>
+                        <li class="flex items-center gap-2"><svg class="w-4 h-4 text-green-400" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7"></path>
+                            </svg> All Premium Templates</li>
+                        <li class="flex items-center gap-2"><svg class="w-4 h-4 text-green-400" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7"></path>
+                            </svg> Priority Support</li>
+                    </ul>
+                    <button
+                        class="w-full py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold rounded-xl hover:scale-105 transition-all shadow-lg shadow-orange-500/20">
+                        Get Pro - $9.99
+                    </button>
+                </div>
 
-            <button
-                class="bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold py-4 px-10 rounded-xl hover:from-yellow-400 hover:to-orange-400 transition-all transform hover:scale-105 shadow-lg shadow-orange-500/30">
-                Unlock Premium Access
-            </button>
-
-            <p class="mt-6 text-sm text-gray-400">
-                (This is a placeholder for the payment flow)
-            </p>
+                <!-- Option 2: Use Own API Key -->
+                <div
+                    class="glass-card p-6 rounded-2xl border border-purple-500/30 flex flex-col items-center text-center">
+                    <h3 class="text-xl font-bold text-white mb-4">Use Your API Key</h3>
+                    <p class="text-sm text-gray-400 mb-6">
+                        Provide your own Google Gemini API key to generate portfolios using your own quota.
+                    </p>
+                    <button onclick="showApiKeyForm()"
+                        class="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold rounded-xl hover:scale-105 transition-all shadow-lg shadow-purple-500/20">
+                        Use My API Key
+                    </button>
+                </div>
+            </div>
         </div>
+
+        <!-- Hidden API Key Upload Form -->
+        <div id="api-key-section" class="hidden mt-8 glass rounded-3xl shadow-2xl p-8 md:p-12 relative overflow-hidden">
+            <div
+                class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-purple-500/10 to-blue-500/10 pointer-events-none">
+            </div>
+
+            <div class="flex justify-between items-center mb-8 relative z-10">
+                <h2 class="text-3xl font-bold text-white">Generate with API Key</h2>
+                <button onclick="hideApiKeyForm()" class="text-gray-400 hover:text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+
+            <form method="post" action="{% url 'upload_resume' %}" enctype="multipart/form-data" class="relative z-10">
+                {% csrf_token %}
+
+                <div class="mb-6">
+                    <label class="block text-gray-300 text-sm font-medium mb-2">Your Gemini API Key</label>
+                    <div class="relative">
+                        <input type="text" name="user_api_key" required
+                            class="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-purple-500 transition-colors"
+                            placeholder="AIzaSy...">
+                        <button type="button" onclick="toggleGuide()"
+                            class="absolute right-3 top-3 text-purple-400 hover:text-purple-300 text-xs font-bold">
+                            How to get one?
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Guide Section (Hidden by default) -->
+                <div id="api-guide" class="hidden mb-8 p-6 bg-purple-500/10 rounded-2xl border border-purple-500/20">
+                    <h4 class="text-white font-bold mb-3 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        How to get your Gemini API Key
+                    </h4>
+                    <ol class="text-sm text-gray-300 space-y-3 list-decimal ml-4">
+                        <li>Go to the <a href="https://aistudio.google.com/app/apikey" target="_blank"
+                                class="text-purple-400 hover:underline">Google AI Studio</a>.</li>
+                        <li>Sign in with your Google Account.</li>
+                        <li>Click on the <strong>"Create API key"</strong> button.</li>
+                        <li>Select a project (or create a new one) and click <strong>"Create API key in existing
+                                project"</strong>.</li>
+                        <li>Copy your API key and paste it in the field above.</li>
+                    </ol>
+                    <p class="mt-4 text-xs text-gray-400 italic">Note: Your API key is used only for this request and is
+                        not stored on our servers.</p>
+                </div>
+
+                <div class="border-4 border-dashed border-purple-500/30 bg-purple-500/5 rounded-2xl p-8 text-center hover:border-purple-500/60 transition-all cursor-pointer group"
+                    id="drop-zone-api">
+                    <input type="file" name="resume_file" accept="application/pdf" class="hidden" id="resume-upload-api"
+                        required>
+                    <label for="resume-upload-api" class="cursor-pointer">
+                        <svg class="w-12 h-12 mx-auto text-purple-400 mb-3" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                            </path>
+                        </svg>
+                        <p class="text-gray-200 font-medium" id="file-name-api">Click to upload resume (PDF)</p>
+                    </label>
+                </div>
+
+                <button type="submit"
+                    class="w-full mt-8 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold py-4 rounded-xl hover:scale-[1.02] transition-all shadow-lg shadow-purple-900/50">
+                    Generate Portfolio
+                </button>
+            </form>
+        </div>
+
+        <script>
+            function showApiKeyForm() {
+                document.getElementById('api-key-section').classList.remove('hidden');
+                document.getElementById('api-key-section').scrollIntoView({ behavior: 'smooth' });
+            }
+            function hideApiKeyForm() {
+                document.getElementById('api-key-section').classList.add('hidden');
+            }
+            function toggleGuide() {
+                const guide = document.getElementById('api-guide');
+                guide.classList.toggle('hidden');
+            }
+
+            // Handle file upload for API section
+            const fileInputApi = document.getElementById('resume-upload-api');
+            const fileNameApi = document.getElementById('file-name-api');
+            fileInputApi.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    fileNameApi.textContent = e.target.files[0].name;
+                }
+            });
+
+            // Auto-show API form if there's an API error
+            document.addEventListener('DOMContentLoaded', () => {
+                const messages = document.querySelectorAll('.messages .error');
+                messages.forEach(msg => {
+                    if (msg.textContent.includes('API Key Error')) {
+                        showApiKeyForm();
+                    }
+                });
+            });
+        </script>
         {% else %}
         <!-- Upload Form -->
         <div class="glass rounded-3xl shadow-2xl p-8 md:p-12 hover-scale relative overflow-hidden">
@@ -210,6 +351,21 @@
                     </svg>
                 </div>
                 <h2 class="text-3xl font-bold text-white mb-2">Upload Your Resume</h2>
+                {% if has_api_key %}
+                <div class="flex items-center justify-center gap-2 mb-2">
+                    <span
+                        class="px-3 py-1 bg-green-500/20 text-green-400 text-xs font-bold rounded-full border border-green-500/30">
+                        Using Your API Key
+                    </span>
+                    <button onclick="showApiKeyForm()" class="text-xs text-purple-400 hover:text-purple-300 underline">
+                        Update Key
+                    </button>
+                    <span class="text-gray-600">|</span>
+                    <a href="{% url 'clear_api_key' %}" class="text-xs text-red-400 hover:text-red-300 underline">
+                        Clear Key
+                    </a>
+                </div>
+                {% endif %}
                 <p class="text-gray-300">PDF format, maximum 10MB</p>
             </div>
 

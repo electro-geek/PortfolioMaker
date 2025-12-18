@@ -10,4 +10,5 @@ urlpatterns = [
     path('api/login/', views.firebase_login, name='firebase_login'),
     path('run-migrations/', views.run_migrations, name='run_migrations'),
     path('logout/', views.logout_view, name='logout'),
+    path('clear-api-key/', views.clear_api_key, name='clear_api_key'),
 ]

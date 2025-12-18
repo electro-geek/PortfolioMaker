@@ -25,22 +25,32 @@ def extract_text_from_pdf(pdf_file):
         raise Exception(f"Error extracting text from PDF: {str(e)}")
 
 
-def get_portfolio_data(text):
+def get_portfolio_data(text, api_key=None):
     """
     Use Google Gemini API to parse resume text and extract structured data
     
     Args:
         text: Raw text extracted from resume PDF
+        api_key: Optional user-provided Gemini API key
         
     Returns:
         dict: Structured portfolio data
     """
     try:
         # Configure Gemini API
-        genai.configure(api_key=settings.GEMINI_API_KEY)
+        api_key_to_use = api_key if api_key else settings.GEMINI_API_KEY
+        
+        if not api_key_to_use:
+            raise Exception("No Gemini API key provided. Please provide one in the premium options.")
+            
+        # Debug print (masked)
+        masked_key = f"{api_key_to_use[:4]}...{api_key_to_use[-4:]}" if len(api_key_to_use) > 8 else "****"
+        print(f"DEBUG: Configuring Gemini with key: {masked_key}")
+        
+        genai.configure(api_key=api_key_to_use)
         
         # Create the model
-        model = genai.GenerativeModel('gemini-2.5-flash')
+        model = genai.GenerativeModel('gemini-1.5-flash')
         
         # Craft the prompt
         prompt = f"""You are a professional career consultant. Analyze the following resume text and extract structured information.
