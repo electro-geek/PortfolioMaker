@@ -153,12 +153,22 @@ DATABASES = {
 }
 
 # Update database configuration from $DATABASE_URL or $POSTGRES_URL (for Vercel Postgres)
-db_url = os.environ.get('DATABASE_URL') or \
+# Update database configuration from config.properties or Environment Variables
+# Update database configuration from config.properties or Environment Variables
+db_url = config.get('DATABASE_URL') or \
+         config.get('POSTGRES_URL') or \
+         config.get('NILEDB_URL') or \
+         config.get('NILEDB_POSTGRES_URL') or \
+         os.environ.get('DATABASE_URL') or \
          os.environ.get('POSTGRES_URL') or \
          os.environ.get('POSTGRES_PRISMA_URL') or \
          os.environ.get('POSTGRES_URL_NON_POOLING') or \
          os.environ.get('NILEDB_URL') or \
          os.environ.get('NILEDB_POSTGRES_URL')
+
+print(f"DEBUG: Config keys: {list(config.keys())}")
+print(f"DEBUG: NILEDB_URL in config: '{config.get('NILEDB_URL')}'")
+print(f"DEBUG: db_url initially: '{db_url}'")
 
 if db_url:
     # Fix protocol for Django (postgres:// -> postgresql://)

@@ -1,0 +1,190 @@
+{
+  "portfolio_requests": [
+    {
+      "id": 1,
+      "resume_file": "resumes/MritunjayResume_M.pdf",
+      "extracted_data": null,
+      "created_at": "2025-12-15T05:33:32.071815+00:00",
+      "updated_at": "2025-12-15T05:33:32.071877+00:00"
+    },
+    {
+      "id": 2,
+      "resume_file": "resumes/MritunjayResume_M_pDmm1Kj.pdf",
+      "extracted_data": null,
+      "created_at": "2025-12-15T05:36:29.290663+00:00",
+      "updated_at": "2025-12-15T05:36:29.290754+00:00"
+    },
+    {
+      "id": 3,
+      "resume_file": "resumes/MritunjayResume_M_BQE7zcP.pdf",
+      "extracted_data": null,
+      "created_at": "2025-12-15T05:44:48.871524+00:00",
+      "updated_at": "2025-12-15T05:44:48.871609+00:00"
+    },
+    {
+      "id": 4,
+      "resume_file": "resumes/MritunjayResume_M_2LNZVj2.pdf",
+      "extracted_data": null,
+      "created_at": "2025-12-15T05:51:55.562986+00:00",
+      "updated_at": "2025-12-15T05:51:55.563078+00:00"
+    },
+    {
+      "id": 5,
+      "resume_file": "resumes/MritunjayResume_M_RpuKndp.pdf",
+      "extracted_data": {
+        "name": "Mritunjay Sharma",
+        "tagline": "Backend Engineer with 3+ years of experience",
+        "bio": "Backend Engineer with 3+ years of experience building scalable, real-time systems using Python frameworks (FastAPI and Django). Skilled in designing REST APIs, optimizing performance with Redis, and Celery, and deploying production-ready services using Docker and Kubernetes. Experienced in WebSockets for real-time communication and integrating LLM-powered modules into backend workflows. Strong ownership mindset with a track record of delivering end-to-end projects while collaborating effectively across teams.",
+        "contact": {
+          "email": "mritunjaypandey0789@gmail.com",
+          "phone": "+91 6378768400",
+          "linkedin": null,
+          "github": null,
+          "website": null
+        },
+        "skills": [
+          "Python",
+          "C/C++",
+          "JAVA",
+          "Flask",
+          "Django",
+          "Tensorflow",
+          "PyTorch",
+          "Git",
+          "Docker",
+          "Kubernetes",
+          "Postman",
+          "GitHub",
+          "GitLab",
+          "Jenkins",
+          "MySQL",
+          "PostgreSQL",
+          "MongoDB",
+          "FastAPI",
+          "Redis",
+          "Celery",
+          "WebSockets",
+          "LLM",
+          "AI",
+          "asyncio",
+          "Azure",
+          "IoT",
+          "Arduino IDE",
+          "Embedded C",
+          "RESTful APIs",
+          "Django REST Framework"
+        ],
+        "experience": [
+          {
+            "role": "Backend Engineer",
+            "company": "Neurabit Solution LLP",
+            "duration": "May 2025 \u2013 Present",
+            "description": "Developed and deployed backend microservices using Python frameworks including FastAPI for high-performance APIs and Django for data-driven applications, containerized with Docker and scaled on Kubernetes. Built real-time communication layers with WebSockets, enabling low-latency data streaming to dashboards and client apps. Integrated AI/LLM-powered modules into production workflows, such as automated incident alerts and intelligent reporting.",
+            "technologies": [
+              "Python",
+              "FastAPI",
+              "Django",
+              "Docker",
+              "Kubernetes",
+              "WebSockets",
+              "AI/LLM"
+            ]
+          },
+          {
+            "role": "Backend Engineer | AI Engineer",
+            "company": "LivNSense Technologies Pvt Ltd",
+            "duration": "April 2024 \u2013 April 2025",
+            "description": "Designed and developed backend systems using Django, ensuring robust and scalable architecture for enterprise applications. Implemented and optimized database schemas and queries using PostgreSQL, improving application performance and data integrity. Built and maintained RESTful APIs to support seamless integration between frontend applications and backend services. Enhanced database operations by creating complex stored procedures, triggers, and indexing strategies in PostgreSQL.",
+            "technologies": [
+              "Django",
+              "PostgreSQL",
+              "RESTful APIs"
+            ]
+          },
+          {
+            "role": "Software Developer",
+            "company": "Young Engineers Entrepreneurship Program by IEEE",
+            "duration": "May 2021 \u2013 August 2021",
+            "description": "Led development of an IoT-based Remote Healthcare Monitoring System, enabling real-time tracking of patient vital signs and health metrics. Used Arduino IDE and embedded C for sensor interfacing and microcontroller programming.",
+            "technologies": [
+              "IoT",
+              "Arduino IDE",
+              "Embedded C"
+            ]
+          }
+        ],
+        "projects": [
+          {
+            "name": "Real-Time Video Streaming and Incident Detection Platform",
+            "duration": "January 2025",
+            "description": "Developed a robust backend service using FastAPI to process live video feeds from multiple cameras. Integrated WebSockets to stream AI/ML inference results, such as incident detections, in real time to a client dashboard. Leveraged asyncio and concurrent workers for parallel processing of multiple camera streams, and implemented Redis + Celery for efficient background job management and scaling heavy workloads. Deployed the system using Kubernetes on Azure, ensuring high scalability and resilience. The platform also featured LLM-powered alert management to generate intelligent summaries of safety incidents and send notifications to MS Teams, delivering a production-ready solution combining real-time processing with AI-driven insights.",
+            "technologies": [
+              "FastAPI",
+              "Redis",
+              "Celery",
+              "Websockets",
+              "Kubernetes",
+              "Azure",
+              "LLM",
+              "asyncio"
+            ],
+            "link": null
+          },
+          {
+            "name": "Ticket Raising Application",
+            "duration": "May 2021",
+            "description": "Designed and developed a comprehensive backend system for a ticket raising application, allowing users to efficiently create, assign, and track tickets within an organization. Implemented robust role-based authentication using Django\u2019s built-in system to ensure secure access control. Structured a database in PostgreSQL to efficiently store and manage ticket details, assignments, and status updates. Built RESTful APIs using Django REST Framework (DRF) to handle all ticket operations, including creation, assignment, and status tracking. Incorporated advanced search and filtering functionalities, enabling users to quickly find tickets based on priority, status, and assigned personnel.",
+            "technologies": [
+              "Django",
+              "PostgreSQL",
+              "Django REST Framework"
+            ],
+            "link": null
+          }
+        ],
+        "education": [
+          {
+            "degree": "B.E. in ECE",
+            "institution": "Visvesvaraya Technological University",
+            "duration": "September 2018 \u2013 June 2022",
+            "details": "CGPA : 7.1"
+          },
+          {
+            "degree": "PCM",
+            "institution": "Rajasthan Board of Secondary Education",
+            "duration": "August 2016 \u2013 May 2017",
+            "details": "CGPA : 8.9"
+          }
+        ]
+      },
+      "created_at": "2025-12-15T05:54:33.668550+00:00",
+      "updated_at": "2025-12-15T05:54:59.756038+00:00"
+    }
+  ],
+  "portfolio_templates": [
+    {
+      "id": 1,
+      "name": "Terminal",
+      "slug": "terminal",
+      "description": "Retro hacker terminal with green monospace text and command-line interface aesthetics",
+      "is_active": true,
+      "created_at": "2025-12-15T05:27:05.254529+00:00"
+    },
+    {
+      "id": 2,
+      "name": "Renaissance",
+      "slug": "renaissance",
+      "description": "Classical art-inspired design with ornate typography and vintage manuscript styling",
+      "is_active": true,
+      "created_at": "2025-12-15T05:27:05.262705+00:00"
+    },
+    {
+      "id": 3,
+      "name": "Newspaper",
+      "slug": "newspaper",
+      "description": "Classic newspaper layout with multi-column design and bold print journalism aesthetic",
+      "is_active": true,
+      "created_at": "2025-12-15T05:27:05.269051+00:00"
+    }
+  ]
+}

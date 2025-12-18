@@ -11,21 +11,18 @@ class Command(BaseCommand):
                 'name': 'Terminal',
                 'slug': 'terminal',
                 'description': 'Retro hacker terminal with green monospace text and command-line interface aesthetics',
-                'template_file_path': 'core/templates/portfolios/terminal/index.html',
                 'is_active': True,
             },
             {
                 'name': 'Renaissance',
                 'slug': 'renaissance',
                 'description': 'Classical art-inspired design with ornate typography and vintage manuscript styling',
-                'template_file_path': 'core/templates/portfolios/renaissance/index.html',
                 'is_active': True,
             },
             {
                 'name': 'Newspaper',
                 'slug': 'newspaper',
                 'description': 'Classic newspaper layout with multi-column design and bold print journalism aesthetic',
-                'template_file_path': 'core/templates/portfolios/newspaper/index.html',
                 'is_active': True,
             },
         ]
