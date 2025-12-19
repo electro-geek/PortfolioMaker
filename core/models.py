@@ -32,6 +32,16 @@ class PortfolioRequest(models.Model):
     def __str__(self):
         return f"Request {self.id} at {self.created_at}"
 
+class Visitor(models.Model):
+    ip_address = models.GenericIPAddressField()
+    user_agent = models.TextField(blank=True, null=True)
+    path = models.CharField(max_length=255)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    session_key = models.CharField(max_length=40, blank=True, null=True)
+
+    def __str__(self):
+        return f"Visit from {self.ip_address} to {self.path} at {self.timestamp}"
+
 # Signal to automatically create/save UserProfile when User is created/saved
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
