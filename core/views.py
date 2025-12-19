@@ -43,7 +43,9 @@ def firebase_login(request):
         picture = decoded_token.get('picture', '')
         
         if not email:
-            return JsonResponse({'error': 'Email not found in token'}, status=400)
+            # Fallback for users without a public email (common on GitHub)
+            email = f"{uid}@no-email.firebase"
+            print(f"DEBUG: No email found in token for UID {uid}, using fallback: {email}")
             
         # Get or create user
         try:
