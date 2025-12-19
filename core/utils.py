@@ -50,7 +50,7 @@ def get_portfolio_data(text, api_key=None):
         genai.configure(api_key=api_key_to_use)
         
         # Create the model
-        model = genai.GenerativeModel('gemini-1.5-flash')
+        model = genai.GenerativeModel('gemini-flash-latest')
         
         # Craft the prompt
         prompt = f"""You are a professional career consultant. Analyze the following resume text and extract structured information.
