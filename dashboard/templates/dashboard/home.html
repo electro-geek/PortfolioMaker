@@ -222,7 +222,12 @@
                 <span class="stat-label">Unique Visitors</span>
                 <div class="stat-value">{{ unique_visitors }}</div>
             </div>
+            <div class="stat-card" style="border-color: #f59e0b;">
+                <span class="stat-label">Premium Waitlist</span>
+                <div class="stat-value" style="color: #f59e0b;">{{ total_premium_waitlist }}</div>
+            </div>
         </div>
+
 
         <div class="content-grid" style="margin-bottom: 2rem;">
             <div class="card">
@@ -266,19 +271,32 @@
             </div>
 
             <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title">Top Pages</h2>
+                <h2 class="card-title p-6 border-b border-white/5">Premium Waitlist</h2>
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Registered</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in waitlist_users %}
+                            <tr>
+                                <td style="font-weight: 500;">{{ user.full_name }}</td>
+                                <td style="color: var(--text-muted);">{{ user.email }}</td>
+                                <td>{{ user.registered_at|date:"M d, Y" }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3" style="text-align: center; padding: 3rem; color: var(--text-muted);">No
+                                    early access registrations yet.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
-                <ul class="path-list">
-                    {% for item in path_stats %}
-                    <li class="path-item">
-                        <span class="path-name">{{ item.path }}</span>
-                        <span class="path-count">{{ item.count }}</span>
-                    </li>
-                    {% empty %}
-                    <li class="path-item" style="justify-content: center; color: var(--text-muted);">No data.</li>
-                    {% endfor %}
-                </ul>
             </div>
         </div>
 
@@ -321,6 +339,7 @@
             </div>
         </div>
     </div>
+
 </body>
 
 </html>

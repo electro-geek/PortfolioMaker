@@ -11,4 +11,5 @@ urlpatterns = [
     path('run-migrations/', views.run_migrations, name='run_migrations'),
     path('logout/', views.logout_view, name='logout'),
     path('clear-api-key/', views.clear_api_key, name='clear_api_key'),
+    path('premium-waitlist/', views.premium_waitlist, name='premium_waitlist'),
 ]

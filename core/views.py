@@ -7,9 +7,9 @@ from django.conf import settings
 from django.contrib import messages
 from django.template import Template, Context
 from django.template.loader import render_to_string
-from .models import PortfolioTemplate
 from .utils import get_portfolio_data, extract_text_from_pdf
 from .forms import ResumeUploadForm
+from .models import PortfolioTemplate, PremiumWaitlist
 
 
 import json
@@ -338,3 +338,24 @@ def run_migrations(request):
         sys.stdout = sys.__stdout__
         
     return HttpResponse(msg, content_type='text/plain')
+
+def premium_waitlist(request):
+    """Handle premium features waitlist registration"""
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        full_name = request.POST.get('full_name')
+        
+        if email and full_name:
+            # Check if already registered
+            if not PremiumWaitlist.objects.filter(email=email).exists():
+                PremiumWaitlist.objects.create(
+                    user=request.user if request.user.is_authenticated else None,
+                    email=email,
+                    full_name=full_name
+                )
+                messages.success(request, "Success! You've been added to the early access list. We'll notify you soon!")
+            else:
+                messages.info(request, "You are already on our early access list!")
+            return redirect('home')
+            
+    return render(request, 'core/premium_waitlist.html')

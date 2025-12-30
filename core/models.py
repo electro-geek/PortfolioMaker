@@ -42,6 +42,15 @@ class Visitor(models.Model):
     def __str__(self):
         return f"Visit from {self.ip_address} to {self.path} at {self.timestamp}"
 
+class PremiumWaitlist(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    email = models.EmailField()
+    full_name = models.CharField(max_length=255)
+    registered_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"{self.email} - {self.registered_at.strftime('%Y-%m-%d')}"
+
 # Signal to automatically create/save UserProfile when User is created/saved
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
