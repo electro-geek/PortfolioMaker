@@ -6,7 +6,7 @@
         display: inline-block;
         width: 4px;
         height: 0.8em;
-        background-color: #a855f7;
+        background-color: #ffffff;
         margin-left: 4px;
         vertical-align: middle;
         animation: blink 1s infinite;
@@ -44,10 +44,10 @@
         <div class="container mx-auto px-6 py-4 flex justify-between items-center glass rounded-2xl mb-8">
             <div class="flex items-center gap-2">
                 <div
-                    class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg flex items-center justify-center text-white font-bold shadow-lg">
+                    class="w-8 h-8 bg-gradient-to-br from-white to-gray-400 rounded-lg flex items-center justify-center text-black font-bold shadow-lg">
                     AI</div>
                 <span
-                    class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">PortfolioMaker</span>
+                    class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">PortfolioMaker</span>
             </div>
             <div class="flex items-center gap-4">
                 {% if user.is_authenticated %}
@@ -56,10 +56,10 @@
                         class="flex items-center gap-3 bg-white/10 px-4 py-2 rounded-full border border-white/10 backdrop-blur-sm">
                         {% if request.session.user_picture %}
                         <img src="{{ request.session.user_picture }}" alt="Profile"
-                            class="w-8 h-8 rounded-full border-2 border-purple-400">
+                            class="w-8 h-8 rounded-full border-2 border-white">
                         {% else %}
                         <div
-                            class="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-white font-bold border-2 border-purple-300">
+                            class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-black font-bold border-2 border-gray-300">
                             {{ user.first_name|first|default:user.username|first|upper }}
                         </div>
                         {% endif %}
@@ -171,13 +171,13 @@
         <!-- Premium Options (When Limit Reached) -->
         <div class="glass rounded-3xl shadow-2xl p-8 md:p-12 hover-scale relative overflow-hidden">
             <div
-                class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-yellow-500/10 to-orange-500/10 pointer-events-none">
+                class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-white/5 to-gray-500/5 pointer-events-none">
             </div>
 
             <div class="text-center mb-8 relative z-10">
                 <div
-                    class="inline-block p-4 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-2xl mb-4 shadow-lg shadow-orange-500/30">
-                    <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    class="inline-block p-4 bg-gradient-to-br from-white to-gray-300 rounded-2xl mb-4 shadow-lg shadow-white/20">
+                    <svg class="w-12 h-12 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-7.714 2.143L11 21l-2.286-6.857L1 12l7.714-2.143L11 3z">
                         </path>
@@ -190,41 +190,39 @@
 
             <div class="grid md:grid-cols-2 gap-6 relative z-10">
                 <!-- Option 1: Pro Plan -->
-                <div
-                    class="glass-card p-6 rounded-2xl border border-yellow-500/30 flex flex-col items-center text-center">
+                <div class="glass-card p-6 rounded-2xl border border-white/20 flex flex-col items-center text-center">
                     <h3 class="text-xl font-bold text-white mb-4">Upgrade to Pro</h3>
                     <ul class="text-sm text-gray-400 mb-6 space-y-2 text-left">
-                        <li class="flex items-center gap-2"><svg class="w-4 h-4 text-green-400" fill="none"
+                        <li class="flex items-center gap-2"><svg class="w-4 h-4 text-white" fill="none"
                                 stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M5 13l4 4L19 7"></path>
                             </svg> Unlimited Generations</li>
-                        <li class="flex items-center gap-2"><svg class="w-4 h-4 text-green-400" fill="none"
+                        <li class="flex items-center gap-2"><svg class="w-4 h-4 text-white" fill="none"
                                 stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M5 13l4 4L19 7"></path>
                             </svg> All Premium Templates</li>
-                        <li class="flex items-center gap-2"><svg class="w-4 h-4 text-green-400" fill="none"
+                        <li class="flex items-center gap-2"><svg class="w-4 h-4 text-white" fill="none"
                                 stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M5 13l4 4L19 7"></path>
                             </svg> Priority Support</li>
                     </ul>
                     <button
-                        class="w-full py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold rounded-xl hover:scale-105 transition-all shadow-lg shadow-orange-500/20">
+                        class="w-full py-3 bg-gradient-to-r from-white to-gray-300 text-black font-bold rounded-xl hover:scale-105 transition-all shadow-lg shadow-white/10">
                         Get Pro - $9.99
                     </button>
                 </div>
 
                 <!-- Option 2: Use Own API Key -->
-                <div
-                    class="glass-card p-6 rounded-2xl border border-purple-500/30 flex flex-col items-center text-center">
+                <div class="glass-card p-6 rounded-2xl border border-white/20 flex flex-col items-center text-center">
                     <h3 class="text-xl font-bold text-white mb-4">Use Your API Key</h3>
                     <p class="text-sm text-gray-400 mb-6">
                         Provide your own Google Gemini API key to generate portfolios using your own quota.
                     </p>
                     <button onclick="showApiKeyForm()"
-                        class="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold rounded-xl hover:scale-105 transition-all shadow-lg shadow-purple-500/20">
+                        class="w-full py-3 bg-gradient-to-r from-gray-200 to-gray-400 text-black font-bold rounded-xl hover:scale-105 transition-all shadow-lg shadow-white/10">
                         Use My API Key
                     </button>
                 </div>
@@ -234,7 +232,7 @@
         <!-- Hidden API Key Upload Form -->
         <div id="api-key-section" class="hidden mt-8 glass rounded-3xl shadow-2xl p-8 md:p-12 relative overflow-hidden">
             <div
-                class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-purple-500/10 to-blue-500/10 pointer-events-none">
+                class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-white/5 to-gray-500/5 pointer-events-none">
             </div>
 
             <div class="flex justify-between items-center mb-8 relative z-10">
@@ -254,10 +252,10 @@
                     <label class="block text-gray-300 text-sm font-medium mb-2">Your Gemini API Key</label>
                     <div class="relative">
                         <input type="text" name="user_api_key" required
-                            class="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-purple-500 transition-colors"
+                            class="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-white transition-colors"
                             placeholder="AIzaSy...">
                         <button type="button" onclick="toggleGuide()"
-                            class="absolute right-3 top-3 text-purple-400 hover:text-purple-300 text-xs font-bold">
+                            class="absolute right-3 top-3 text-gray-400 hover:text-white text-xs font-bold">
                             How to get one?
                         </button>
                     </div>
@@ -266,7 +264,7 @@
                 <!-- Guide Section (Hidden by default) -->
                 <div id="api-guide" class="hidden mb-8 p-6 bg-purple-500/10 rounded-2xl border border-purple-500/20">
                     <h4 class="text-white font-bold mb-3 flex items-center gap-2">
-                        <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
@@ -285,12 +283,12 @@
                         not stored on our servers.</p>
                 </div>
 
-                <div class="border-4 border-dashed border-purple-500/30 bg-purple-500/5 rounded-2xl p-8 text-center hover:border-purple-500/60 transition-all cursor-pointer group"
+                <div class="border-4 border-dashed border-white/20 bg-white/5 rounded-2xl p-8 text-center hover:border-white/40 transition-all cursor-pointer group"
                     id="drop-zone-api">
                     <input type="file" name="resume_file" accept="application/pdf" class="hidden" id="resume-upload-api"
                         required>
                     <label for="resume-upload-api" class="cursor-pointer">
-                        <svg class="w-12 h-12 mx-auto text-purple-400 mb-3" fill="none" stroke="currentColor"
+                        <svg class="w-12 h-12 mx-auto text-white/60 mb-3" fill="none" stroke="currentColor"
                             viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
@@ -301,7 +299,7 @@
                 </div>
 
                 <button type="submit"
-                    class="w-full mt-8 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold py-4 rounded-xl hover:scale-[1.02] transition-all shadow-lg shadow-purple-900/50">
+                    class="w-full mt-8 bg-gradient-to-r from-white to-gray-300 text-black font-bold py-4 rounded-xl hover:scale-[1.02] transition-all shadow-lg shadow-white/10">
                     Generate Portfolio
                 </button>
             </form>
@@ -344,13 +342,13 @@
         <div class="glass rounded-3xl shadow-2xl p-8 md:p-12 hover-scale relative overflow-hidden">
             <!-- Decorative glow -->
             <div
-                class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-purple-500/10 to-blue-500/10 pointer-events-none">
+                class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-white/10 to-gray-500/10 pointer-events-none">
             </div>
 
             <div class="text-center mb-8 relative z-10">
                 <div
-                    class="inline-block p-4 bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl mb-4 shadow-lg shadow-purple-500/30">
-                    <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    class="inline-block p-4 bg-gradient-to-br from-white to-gray-300 rounded-2xl mb-4 shadow-lg shadow-white/20">
+                    <svg class="w-12 h-12 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12">
                         </path>
@@ -363,7 +361,7 @@
                         class="px-3 py-1 bg-green-500/20 text-green-400 text-xs font-bold rounded-full border border-green-500/30">
                         Using Your API Key
                     </span>
-                    <button onclick="showApiKeyForm()" class="text-xs text-purple-400 hover:text-purple-300 underline">
+                    <button onclick="showApiKeyForm()" class="text-xs text-gray-400 hover:text-white underline">
                         Update Key
                     </button>
                     <span class="text-gray-600">|</span>
@@ -379,14 +377,14 @@
                 class="relative z-10">
                 {% csrf_token %}
 
-                <div class="border-4 border-dashed border-purple-500/30 bg-purple-500/5 rounded-2xl p-12 text-center hover:border-purple-500/60 hover:bg-purple-500/10 transition-all cursor-pointer group"
+                <div class="border-4 border-dashed border-white/20 bg-white/5 rounded-2xl p-12 text-center hover:border-white/40 hover:bg-white/10 transition-all cursor-pointer group"
                     id="drop-zone">
                     <input type="file" name="resume_file" accept="application/pdf" class="hidden" id="resume-upload"
                         required>
 
                     <label for="resume-upload" class="cursor-pointer">
                         <div class="mb-4 transform group-hover:scale-110 transition-transform">
-                            <svg class="w-16 h-16 mx-auto text-purple-400" fill="none" stroke="currentColor"
+                            <svg class="w-16 h-16 mx-auto text-white/60" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
@@ -403,7 +401,7 @@
                 </div>
 
                 <button type="submit"
-                    class="w-full mt-8 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold py-4 px-8 rounded-xl hover:from-purple-500 hover:to-blue-500 transition-all transform hover:scale-[1.02] shadow-lg shadow-purple-900/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                    class="w-full mt-8 bg-gradient-to-r from-white to-gray-300 text-black font-bold py-4 px-8 rounded-xl hover:from-gray-100 hover:to-gray-400 transition-all transform hover:scale-[1.02] shadow-lg shadow-white/10 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                     id="submit-btn" disabled>
                     <span class="flex items-center justify-center">
                         <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -446,8 +444,8 @@
         <!-- Features -->
         <div class="grid md:grid-cols-3 gap-6 mt-12">
             <div class="glass rounded-2xl p-6 shadow-lg text-center hover-scale border border-white/10">
-                <div class="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z">
                         </path>
@@ -458,8 +456,8 @@
             </div>
 
             <div class="glass rounded-2xl p-6 shadow-lg text-center hover-scale border border-white/10">
-                <div class="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01">
                         </path>
@@ -470,8 +468,8 @@
             </div>
 
             <div class="glass rounded-2xl p-6 shadow-lg text-center hover-scale border border-white/10">
-                <div class="w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
                     </svg>
